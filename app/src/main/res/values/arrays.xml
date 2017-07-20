@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- These are the options displayed in the kind of habit drop-down Spinner -->
+    <string-array name="array_kind_habit_options">
+        <item>@string/kind_habit_individual</item>
+        <item>@string/kind_habit_collective</item>
+    </string-array>
+
+    <!-- These are the options displayed in the type of habit activity drop-down Spinner -->
+    <string-array name="array_type_activity_options">
+        <item>@string/type_activity_others</item>
+        <item>@string/type_activity_sportive</item>
+        <item>@string/type_activity_intellectual</item>
+        <item>@string/type_activity_social</item>
+    </string-array>
+</resources>

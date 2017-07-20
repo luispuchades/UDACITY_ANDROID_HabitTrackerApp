@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">HabitTrackerApp</string>
+
+    <!-- Title for the activity to add a new habit [CHAR LIMIT=20] -->
+    <string name="editor_activity_title_new_habit">Add a Habit</string>
+
+    <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
+    <string name="category_overview">Overview</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_habit_name">Name</string>
+
+    <!-- Text hint for minuts field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_habit_time">Time (in minuts)</string>
+
+    <!-- Label for kind of habit information in the editor [CHAR LIMIT=30] -->
+    <string name="category_kind_of_habit">Kind of habit</string>
+
+    <!-- Label for typr of activity habit information in the editor [CHAR LIMIT=30] -->
+    <string name="category_type_of_activity">Type of activity</string>
+
+    <!-- MENU CATALOG STRINGS-->
+    <!-- Label for overflow menu option that inserts fake habit data into the app [CHAR LIMIT=20] -->
+    <string name="action_insert_dummy_data">Insert Dummy Data</string>
+
+    <!-- Label for overflow menu option that deletes all habit data in the app [CHAR LIMIT=20] -->
+    <string name="action_delete_all_entries">Delete All Habits</string>
+
+    <!-- Label for editor menu option to save habit and leave editor [CHAR LIMIT=20] -->
+    <string name="action_save">Save</string>
+
+    <!-- Label for editor overflow menu option that deletes the current habit [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
+
+    <!-- STRINGS FOR KIND OF HABIT SPINNER -->
+    <!-- Label for dropdown menu option if the kind of habit is individual [CHAR LIMIT=20] -->
+    <string name="kind_habit_individual">Individual</string>
+
+    <!-- Label for dropdown menu option if the kind of habit is collective [CHAR LIMIT=20] -->
+    <string name="kind_habit_collective">Collective</string>
+
+    <!-- STRINGS FOR KIND OF TYPE OF ACTIVITY -->
+    <!-- Label for dropdown menu option if the type of activity is others [CHAR LIMIT=20] -->
+    <string name="type_activity_others">Others</string>
+
+    <!-- Label for dropdown menu option if the type of activity is sportive [CHAR LIMIT=20] -->
+    <string name="type_activity_sportive">Sportive</string>
+
+    <!-- Label for dropdown menu option if the type of activity is intellectual [CHAR LIMIT=20] -->
+    <string name="type_activity_intellectual">Intellectual</string>
+
+    <!-- Label for dropdown menu option if the type of activsocial [CHAR LIMIT=20] -->
+    <string name="type_activity_social">Social</string>
+</resources>
