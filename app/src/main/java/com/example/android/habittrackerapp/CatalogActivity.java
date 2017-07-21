@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.habittrackerapp.Data.HabitContract.HabitEntry;
 import com.example.android.habittrackerapp.Data.HabitDbHelper;
@@ -48,83 +49,90 @@ public class CatalogActivity extends AppCompatActivity {
             displayDatabaseInfo();
         }
 
+        // Correction from evaluator
+        public Cursor queryAllHabits(){
+            // Create and/or open a database to read from it
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+            // Define a projection that specifies which columns from the database
+            // you will actually use after this query.
+            String[] projection = {
+                    HabitEntry._ID,
+                    HabitEntry.COLUMN_HABIT_NAME,
+                    HabitEntry.COLUMN_HABIT_TIME,
+                    HabitEntry.COLUMN_HABIT_KIND,
+                    HabitEntry.COLUMN_HABIT_ACTIVITY
+            };
+
+            // Perform a query on the pets table
+            Cursor cursor = db.query(
+                    HabitEntry.TABLE_NAME,   // The table to query
+                    projection,              // The columns to return
+                    null,                  // The columns for the WHERE clause
+                    null,                  // The values for the WHERE clause
+                    null,                  // Don't group the rows
+                    null,                  // Don't filter by row groups
+                    null);                   // The sort order
+            return cursor;
+        }
+
+
         /**
          * Temporary helper method to display information in the onscreen TextView about the state
          * of the habits database.
          */
         private void displayDatabaseInfo() {
 
-            // Create and/or open a database to read from it
-            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            Cursor cursor = queryAllHabits();
 
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                HabitEntry._ID,
-                HabitEntry.COLUMN_HABIT_NAME,
-                HabitEntry.COLUMN_HABIT_TIME,
-                HabitEntry.COLUMN_HABIT_KIND,
-                HabitEntry.COLUMN_HABIT_ACTIVITY
-        };
+            TextView displayView = (TextView) findViewById(R.id.text_view_habit);
 
-        // Perform a query on the pets table
-        Cursor cursor = db.query(
-                HabitEntry.TABLE_NAME,   // The table to query
-                projection,              // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,                  // The values for the WHERE clause
-                null,                  // Don't group the rows
-                null,                  // Don't filter by row groups
-                null);                   // The sort order
+            try {
+                // Create a header in the Text View that looks like this:
+                //
+                // The habit table contains <number of rows in Cursor> habits.
+                // _id - name - time - kind of habit - Type of Activity
+                //
+                // In the while loop below, iterate through the rows of the cursor and display
+                // the information from each column in this order.
+                displayView.setText("The habit table contains " + cursor.getCount() + "habits.\n\n");
 
-        TextView displayView = (TextView) findViewById(R.id.text_view_habit);
+                displayView.append(HabitEntry._ID + " -" +
+                        HabitEntry.COLUMN_HABIT_NAME + " - " +
+                        HabitEntry.COLUMN_HABIT_TIME + " - " +
+                        HabitEntry.COLUMN_HABIT_KIND + " - " +
+                        HabitEntry.COLUMN_HABIT_ACTIVITY);
 
-        try {
-            // Create a header in the Text View that looks like this:
-            //
-            // The habit table contains <number of rows in Cursor> habits.
-            // _id - name - time - kind of habit - Type of Activity
-            //
-            // In the while loop below, iterate through the rows of the cursor and display
-            // the information from each column in this order.
-            displayView.setText("The habit table contains " + cursor.getCount() + "habits.\n\n");
+                // Figure out the index of each column
+                int idColumnIndex = cursor.getColumnIndex(HabitEntry._ID);
+                int nameColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_NAME);
+                int timeColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_TIME);
+                int kindColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_KIND);
+                int activityColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_ACTIVITY);
 
-            displayView.append(HabitEntry._ID + " -" +
-                    HabitEntry.COLUMN_HABIT_NAME + " - " +
-                    HabitEntry.COLUMN_HABIT_TIME + " - " +
-                    HabitEntry.COLUMN_HABIT_KIND + " - " +
-                    HabitEntry.COLUMN_HABIT_ACTIVITY);
+                while (cursor.moveToNext()) {
+                    // Use that index to extract the String or Int value of the word
+                    // at the current row the cursor is on.
+                    int currentID = cursor.getInt(idColumnIndex);
+                    String currentName = cursor.getString(nameColumnIndex);
+                    int currentTime = cursor.getInt(timeColumnIndex);
+                    int currentKind = cursor.getInt(kindColumnIndex);
+                    int currentActivity = cursor.getInt(activityColumnIndex);
 
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(HabitEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_NAME);
-            int timeColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_TIME);
-            int kindColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_KIND);
-            int activityColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_ACTIVITY);
+                    // Display the values from each column of the current row in the cursor in the TextView
+                    displayView.append("\n" + currentID + " - " +
+                            currentName + " - " +
+                            currentTime + " - " +
+                            currentKind + " - " +
+                            currentActivity);
+                }
 
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                int currentTime = cursor.getInt(timeColumnIndex);
-                int currentKind = cursor.getInt(kindColumnIndex);
-                int currentActivity = cursor.getInt(activityColumnIndex);
-
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append("\n" + currentID + " - " +
-                        currentName + " - " +
-                        currentTime + " - " +
-                        currentKind + " - " +
-                        currentActivity);
+            } finally {
+                // Always close the cursor when you're done reading from it. This releases all its
+                // resources and makes it invalid.
+                cursor.close();
             }
-
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
         }
-    }
 
     /**
      * Helper method to insert hardcoded habit data into the database. For debugging purposes only.
@@ -150,6 +158,15 @@ public class CatalogActivity extends AppCompatActivity {
         // there are no values).
         // The third argument is the ContentValues object containing the info for snap.
         long newRowId = db.insert(HabitEntry.TABLE_NAME, null, values);
+
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newRowId == -1) {
+            // If the row ID is -1, then there was an error with insertion.
+            Toast.makeText(this, "Error with saving habit", Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            Toast.makeText(this, "Habit saved with row id " + newRowId, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
